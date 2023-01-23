@@ -13,6 +13,7 @@ var endScreen = document.getElementById("end-screen");
 var timer = document.getElementById("time");
 var questionTitle = document.getElementById("question-title");
 var choices = document.getElementById("choices")
+var timeLeft = 101
 
 startBtn.addEventListener("click",function(){
     playQuiz()
@@ -24,10 +25,27 @@ function playQuiz(){
     randomQuestions = shuffle(questions);
     startScreen.setAttribute("class","hide");
     questionsScreen.setAttribute("class","start");
-    countdown();
-    //for (var i = 0; i < 10; i++){
-    nextQuestion(0);
-    //}
+    time = setInterval(tickTock, 1000);
+    var score = 0
+    // for (var i = 0; i < 10; i++){
+    // var correct = nextQuestion(i);
+    // if (correct === true){
+    //   score = score + 10
+    // }
+    // else 
+    // {
+    //   timeLeft = timeLeft - 10;
+    // }
+    // }
+
+}
+function tickTock()
+{
+  timeLeft --
+  timer.textContent = timeLeft
+  if (timeLeft < 1){
+    endQuiz()
+  }
 
 }
 
@@ -73,16 +91,3 @@ function nextQuestion(i){
 
 }
 
-function countdown() {
-    var timeLeft = 101;
-  
-    var timeInterval = setInterval(function () {
-      timeLeft--;
-      timer.textContent = timeLeft
-        console.log(timer)
-      if(timeLeft === 0) {
-        endQuiz();
-        return;
-      }
-    },1000);
-  }
