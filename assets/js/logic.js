@@ -14,6 +14,7 @@ var timer = document.getElementById("time");
 var questionTitle = document.getElementById("question-title");
 var choices = document.getElementById("choices")
 var timeLeft = 101
+var score = 0
 
 startBtn.addEventListener("click",function(){
     playQuiz()
@@ -21,23 +22,30 @@ startBtn.addEventListener("click",function(){
 
 
 function playQuiz(){
+    timeLeft = 101
     console.log("Let's play!");
     randomQuestions = shuffle(questions);
     startScreen.setAttribute("class","hide");
     questionsScreen.setAttribute("class","start");
-    time = setInterval(tickTock, 1000);
-    var score = 0
-    // for (var i = 0; i < 10; i++){
-    // var correct = nextQuestion(i);
-    // if (correct === true){
-    //   score = score + 10
-    // }
-    // else 
-    // {
-    //   timeLeft = timeLeft - 10;
-    // }
-    // }
-
+    questionsScreen.setAttribute("class","start");
+    setInterval(tickTock, 1000);    
+        for (var i = 0; i < 10; i++){
+          var chosenAnswer = ""
+          nextQuestion(i)
+          ans = document.querySelectorAll(".answerButton");
+                for (j = 0; j < ans.length; j++){
+                ans[j].addEventListener("click",function(event){
+                  chosenAnswer = event.target.textContent
+                  if (chosenAnswer ==  randomQuestions[i].correctAnswer)
+                  {
+                    score = score + 10
+                  }
+                  else
+                  {
+                    timeLeft = timeLeft - 10
+                  }
+          })}
+        }
 }
 function tickTock()
 {
@@ -72,6 +80,7 @@ function shuffle(array) {
 function endQuiz(){
     questionsScreen.setAttribute("class","hide")
     endScreen.setAttribute("class","start")
+    timeLeft = 1
 }
 
 function nextQuestion(i){
@@ -84,10 +93,13 @@ function nextQuestion(i){
 
   // Create the list elements for each of the answers and append to choices div
   randomQuestions[i].answers.forEach(element => {
-    var ul = document.createElement("ul");
-    ul.textContent = element;
-    choices.appendChild(ul)
+    var button = document.createElement("button");
+    button.textContent = element;
+    button.setAttribute("class","answerButton")
+    choices.appendChild(button)
+
   });
+  
 
 }
 
