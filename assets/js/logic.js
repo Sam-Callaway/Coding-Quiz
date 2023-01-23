@@ -11,6 +11,8 @@ var startScreen = document.getElementById("start-screen");
 var questionsScreen = document.getElementById("questions");
 var endScreen = document.getElementById("end-screen");
 var timer = document.getElementById("time");
+var questionTitle = document.getElementById("question-title");
+var choices = document.getElementById("choices")
 
 startBtn.addEventListener("click",function(){
     playQuiz()
@@ -18,11 +20,15 @@ startBtn.addEventListener("click",function(){
 
 
 function playQuiz(){
-    console.log("Let's play!")
-    randomquestions = shuffle(questions)
-    startScreen.setAttribute("class","hide")
-    questionsScreen.setAttribute("class","start")
-    countdown();    
+    console.log("Let's play!");
+    randomQuestions = shuffle(questions);
+    startScreen.setAttribute("class","hide");
+    questionsScreen.setAttribute("class","start");
+    countdown();
+    //for (var i = 0; i < 10; i++){
+    nextQuestion(0);
+    //}
+
 }
 
 
@@ -50,10 +56,21 @@ function endQuiz(){
     endScreen.setAttribute("class","start")
 }
 
-function nextQuestion(){
-    for (i = 0; i < 10; i++){
-        
-    }
+function nextQuestion(i){
+  // Delete the answers from the previous question
+  while (choices.firstChild) {
+    choices.removeChild(choices.firstChild);
+  }
+  // Set the question title to the next question
+  questionTitle.textContent = randomQuestions[i].question
+
+  // Create the list elements for each of the answers and append to choices div
+  randomQuestions[i].answers.forEach(element => {
+    var ul = document.createElement("ul");
+    ul.textContent = element;
+    choices.appendChild(ul)
+  });
+
 }
 
 function countdown() {
