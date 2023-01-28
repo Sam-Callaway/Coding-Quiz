@@ -15,6 +15,7 @@ var questionTitle = document.getElementById("question-title");
 var choices = document.getElementById("choices")
 var timeLeft = 101
 var score = 0
+var questionIndex = 0
 
 startBtn.addEventListener("click",function(){
     playQuiz()
@@ -28,25 +29,43 @@ function playQuiz(){
     startScreen.setAttribute("class","hide");
     questionsScreen.setAttribute("class","start");
     questionsScreen.setAttribute("class","start");
-    setInterval(tickTock, 1000);    
-        for (var i = 0; i < 10; i++){
-          var chosenAnswer = ""
-          nextQuestion(i)
-          ans = document.querySelectorAll(".answerButton");
-                for (j = 0; j < ans.length; j++){
-                ans[j].addEventListener("click",function(event){
-                  chosenAnswer = event.target.textContent
-                  if (chosenAnswer ==  randomQuestions[i].correctAnswer)
-                  {
-                    score = score + 10
-                  }
-                  else
-                  {
-                    timeLeft = timeLeft - 10
-                  }
-          })}
-        }
+    setInterval(tickTock, 1000);  
+    runQuiz(questionIndex);
+    };
+
+
+function runQuiz(){
+  var chosenAnswer = "" 
+  if (questionIndex === 10){endQuiz()}
+  nextQuestion(questionIndex)
+  ans = document.querySelectorAll(".answerButton");
+  for (j = 0; j < ans.length; j++){
+    ans[j].addEventListener("click",function(event){
+    chosenAnswer = event.target.textContent
+      if (chosenAnswer ==  randomQuestions[questionIndex].correctAnswer)
+      {
+        score = score + 10
+        console.log(score)
+        questionIndex++
+        console.log(questionIndex)
+        runQuiz()
+      }
+      else
+      {
+        timeLeft = timeLeft - 10
+        questionIndex++
+        runQuiz()
+      }
+})}
+
 }
+
+
+
+
+
+
+
 function tickTock()
 {
   timeLeft --
