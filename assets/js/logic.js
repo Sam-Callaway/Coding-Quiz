@@ -13,11 +13,14 @@ var choices = document.getElementById("choices");
 var finalScore = document.getElementById("final-score");
 var initials = document.getElementById("initials");
 var errorEl = document.getElementById("error-message");
+
 var timeLeft = 101
 var score = 0
+var scoreTimer = 12
 var questionIndex = 0
 const winAudio = new Audio("./assets/sfx/correct.wav");
 const loseAudio = new Audio("./assets/sfx/incorrect.wav");
+
 
 startBtn.addEventListener("click",function(){
     playQuiz()
@@ -28,7 +31,7 @@ highscoreBtn.addEventListener("click",function(){
 });  
 
 function playQuiz(){
-    timeLeft = 5
+    timeLeft = 101
     console.log("Let's play!");
     randomQuestions = shuffle(questions);
     startScreen.setAttribute("class","hide");
@@ -52,12 +55,17 @@ function runQuiz(){
       if (chosenAnswer ==  randomQuestions[questionIndex].correctAnswer)
       {
         winAudio.play();
-        score = score + 10
+        if (scoreTimer < 1){
+          score++
+        }
+        else
+        {score = score + scoreTimer}
+        
         questionIndex++
         correctScreen.setAttribute("class","start");
         questionsScreen.setAttribute("class","hide");
         timeScreen.setAttribute("class","hide");
-        timeLeft = timeLeft + 1
+        timeLeft++
         setTimeout(function() {
           correctScreen.setAttribute("class", "hide");
           if (questionIndex < 10 && timeLeft > 0){
@@ -77,7 +85,7 @@ function runQuiz(){
         wrongScreen.setAttribute("class","start");
         questionsScreen.setAttribute("class","hide");
         timeScreen.setAttribute("class","hide");
-        timeLeft = timeLeft + 1
+        timeLeft++
         setTimeout(function() {
           wrongScreen.setAttribute("class", "hide");
           if (questionIndex < 10 && timeLeft > 0){
@@ -98,6 +106,7 @@ function runQuiz(){
 function tickTock()
 {
   timeLeft --
+  scoreTimer--
   timer.textContent = timeLeft
   if (timeLeft < 2){
     setTimeout(function() {
@@ -130,6 +139,7 @@ function shuffle(array) {
 
 
 function nextQuestion(i){
+  scoreTimer = 12
   // Delete the answers from the previous question
   while (choices.firstChild) {
     choices.removeChild(choices.firstChild);
@@ -144,8 +154,7 @@ function nextQuestion(i){
     button.setAttribute("class","answerButton")
     choices.appendChild(button)
 
-  });
-  
+  });  
 
 }
 
@@ -159,7 +168,24 @@ function endQuiz(){
 }
 
 function highscoreSubmit(){
-  console.log("highscoreSubmit")
-  console.log(initials.textContent)
-  if(initials.textContent === ""){errorEl.setAttribute("class","start");return;}
+  if(initials.value === "" || initials.value.length > 3){errorEl.setAttribute("class","start");return;}
+  var highScores = JSON.parse(localStorage.getItem("highScores"));
+  if (highScores === null){
+    highScores = [{
+      initials: initials.value,
+      score: score
+    }]
+  }
+  else
+  {
+    highScores.push({
+      initials: initials.value,
+      score: score
+    })
+  }
+  localStorage.setItem("highScores", JSON.stringify(highScores));
+  window.location.replace("highscores.html");
 };
+
+
+
