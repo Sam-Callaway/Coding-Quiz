@@ -12,6 +12,8 @@ var choices = document.getElementById("choices")
 var timeLeft = 101
 var score = 0
 var questionIndex = 0
+const winAudio = new Audio("./assets/sfx/correct.wav");
+const loseAudio = new Audio("./assets/sfx/incorrect.wav");
 
 startBtn.addEventListener("click",function(){
     playQuiz()
@@ -42,6 +44,7 @@ function runQuiz(){
     chosenAnswer = event.target.textContent
       if (chosenAnswer ==  randomQuestions[questionIndex].correctAnswer)
       {
+        winAudio.play();
         score = score + 10
         questionIndex++
         correctScreen.setAttribute("class","start");
@@ -61,6 +64,7 @@ function runQuiz(){
       }
       else
       {
+        loseAudio.play();
         timeLeft = timeLeft - 10
         questionIndex++
         wrongScreen.setAttribute("class","start");
