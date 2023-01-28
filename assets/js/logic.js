@@ -1,5 +1,6 @@
 
 var startBtn = document.getElementById("start");
+var highscoreBtn = document.getElementById("submit")
 var startScreen = document.getElementById("start-screen");
 var correctScreen = document.getElementById("correct-screen");
 var wrongScreen = document.getElementById("wrong-screen");
@@ -8,7 +9,10 @@ var endScreen = document.getElementById("end-screen");
 var timer = document.getElementById("time");
 var timeScreen = document.getElementById("timer");
 var questionTitle = document.getElementById("question-title");
-var choices = document.getElementById("choices")
+var choices = document.getElementById("choices");
+var finalScore = document.getElementById("final-score");
+var initials = document.getElementById("initials");
+var errorEl = document.getElementById("error-message");
 var timeLeft = 101
 var score = 0
 var questionIndex = 0
@@ -19,14 +23,17 @@ startBtn.addEventListener("click",function(){
     playQuiz()
   });
 
+highscoreBtn.addEventListener("click",function(){
+    highscoreSubmit();
+});  
 
 function playQuiz(){
-    timeLeft = 101
+    timeLeft = 5
     console.log("Let's play!");
     randomQuestions = shuffle(questions);
     startScreen.setAttribute("class","hide");
     questionsScreen.setAttribute("class","start");
-    setInterval(tickTock, 1000);  
+    tick = setInterval(tickTock, 1000);  
     runQuiz();
     };
 
@@ -35,7 +42,7 @@ function runQuiz(){
   var chosenAnswer = "" 
   if (questionIndex === 10){setTimeout(function() {
     endQuiz()
-  }, 1000);}
+  }, 1000);return;}
 
   nextQuestion(questionIndex)
   ans = document.querySelectorAll(".answerButton");
@@ -53,7 +60,7 @@ function runQuiz(){
         timeLeft = timeLeft + 1
         setTimeout(function() {
           correctScreen.setAttribute("class", "hide");
-          if (questionIndex < 10){
+          if (questionIndex < 10 && timeLeft > 0){
           timeScreen.setAttribute("class","timer start");
           questionsScreen.setAttribute("class","start");
           }
@@ -73,7 +80,7 @@ function runQuiz(){
         timeLeft = timeLeft + 1
         setTimeout(function() {
           wrongScreen.setAttribute("class", "hide");
-          if (questionIndex < 10){
+          if (questionIndex < 10 && timeLeft > 0){
           timeScreen.setAttribute("class","timer start");
           questionsScreen.setAttribute("class","start");
           }
@@ -120,11 +127,7 @@ function shuffle(array) {
   return array;
 }
 
-function endQuiz(){
-    questionsScreen.setAttribute("class","hide")
-    endScreen.setAttribute("class","start")
-    timeLeft = 1
-}
+
 
 function nextQuestion(i){
   // Delete the answers from the previous question
@@ -146,3 +149,17 @@ function nextQuestion(i){
 
 }
 
+function endQuiz(){
+  questionsScreen.setAttribute("class","hide")
+  endScreen.setAttribute("class","start")
+  clearInterval(tick)
+  timeLeft = 0
+  finalScore.textContent = score
+  timeScreen.setAttribute("class","hide")
+}
+
+function highscoreSubmit(){
+  console.log("highscoreSubmit")
+  console.log(initials.textContent)
+  if(initials.textContent === ""){errorEl.setAttribute("class","start");return;}
+};
