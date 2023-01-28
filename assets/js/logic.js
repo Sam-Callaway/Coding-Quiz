@@ -31,7 +31,10 @@ function playQuiz(){
 
 function runQuiz(){
   var chosenAnswer = "" 
-  if (questionIndex === 10){endQuiz()}
+  if (questionIndex === 10){setTimeout(function() {
+    endQuiz()
+  }, 1000);}
+
   nextQuestion(questionIndex)
   ans = document.querySelectorAll(".answerButton");
   for (j = 0; j < ans.length; j++){
@@ -47,8 +50,10 @@ function runQuiz(){
         timeLeft = timeLeft + 1
         setTimeout(function() {
           correctScreen.setAttribute("class", "hide");
+          if (questionIndex < 10){
           timeScreen.setAttribute("class","timer start");
           questionsScreen.setAttribute("class","start");
+          }
         }, 1000);
         console.log(questionIndex)
         console.log(score)
@@ -64,8 +69,10 @@ function runQuiz(){
         timeLeft = timeLeft + 1
         setTimeout(function() {
           wrongScreen.setAttribute("class", "hide");
+          if (questionIndex < 10){
           timeScreen.setAttribute("class","timer start");
           questionsScreen.setAttribute("class","start");
+          }
         }, 1000);
         console.log(questionIndex)
         console.log(score)
@@ -81,8 +88,10 @@ function tickTock()
 {
   timeLeft --
   timer.textContent = timeLeft
-  if (timeLeft < 1){
-    endQuiz()
+  if (timeLeft < 2){
+    setTimeout(function() {
+      endQuiz()
+    }, 1000);
   }
 
 }
