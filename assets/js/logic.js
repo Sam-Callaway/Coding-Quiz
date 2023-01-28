@@ -1,16 +1,12 @@
-// Function playQuiz() that event listens for pressing start quiz button and contains the code for running the other functions that make up the quiz
-// On start playQuiz() need to hide the start-screen div and show the questions div by changing the class
-// Initialise a timer 
-// Function nextQuestion() to pick a question from the questions.js file
-// 
-//
-//
-// 
+
 var startBtn = document.getElementById("start");
 var startScreen = document.getElementById("start-screen");
+var correctScreen = document.getElementById("correct-screen");
+var wrongScreen = document.getElementById("wrong-screen");
 var questionsScreen = document.getElementById("questions");
 var endScreen = document.getElementById("end-screen");
 var timer = document.getElementById("time");
+var timeScreen = document.getElementById("timer");
 var questionTitle = document.getElementById("question-title");
 var choices = document.getElementById("choices")
 var timeLeft = 101
@@ -28,9 +24,8 @@ function playQuiz(){
     randomQuestions = shuffle(questions);
     startScreen.setAttribute("class","hide");
     questionsScreen.setAttribute("class","start");
-    questionsScreen.setAttribute("class","start");
     setInterval(tickTock, 1000);  
-    runQuiz(questionIndex);
+    runQuiz();
     };
 
 
@@ -45,24 +40,40 @@ function runQuiz(){
       if (chosenAnswer ==  randomQuestions[questionIndex].correctAnswer)
       {
         score = score + 10
-        console.log(score)
         questionIndex++
+        correctScreen.setAttribute("class","start");
+        questionsScreen.setAttribute("class","hide");
+        timeScreen.setAttribute("class","hide");
+        timeLeft = timeLeft + 1
+        setTimeout(function() {
+          correctScreen.setAttribute("class", "hide");
+          timeScreen.setAttribute("class","timer start");
+          questionsScreen.setAttribute("class","start");
+        }, 1000);
         console.log(questionIndex)
+        console.log(score)
         runQuiz()
       }
       else
       {
         timeLeft = timeLeft - 10
         questionIndex++
+        wrongScreen.setAttribute("class","start");
+        questionsScreen.setAttribute("class","hide");
+        timeScreen.setAttribute("class","hide");
+        timeLeft = timeLeft + 1
+        setTimeout(function() {
+          wrongScreen.setAttribute("class", "hide");
+          timeScreen.setAttribute("class","timer start");
+          questionsScreen.setAttribute("class","start");
+        }, 1000);
+        console.log(questionIndex)
+        console.log(score)
         runQuiz()
       }
 })}
 
 }
-
-
-
-
 
 
 
