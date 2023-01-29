@@ -22,7 +22,7 @@ questions = [
     {
         question:"What is a function?",
         answers: ["A way to debug a program","A data structure for storing variables","A loop that executes code multiple times","A named block of code that performs a specific task"],
-        correctAnswer: "A named block of code that performs a specific task."
+        correctAnswer: "A named block of code that performs a specific task"
     },
     {
         question:"What does the acronym API stand for?",

@@ -31,41 +31,51 @@ highscoreBtn.addEventListener("click",function(){
 });  
 
 function playQuiz(){
+  // Reset the timeLeft variable in case the user has played once already
     timeLeft = 101
-    console.log("Let's play!");
+  // Shuffle the questions so they are not in the same order each time the user plays
     randomQuestions = shuffle(questions);
+  // Hide the start screen and show the questions screen
     startScreen.setAttribute("class","hide");
     questionsScreen.setAttribute("class","start");
+  // Start the clock to count down time left on the quiz
     tick = setInterval(tickTock, 1000);  
     runQuiz();
     };
 
-
+// This function handles getting the next question and setting the event listeners for the user to answer
 function runQuiz(){
   var chosenAnswer = "" 
+  // Use questionIndex to see which question we're on. Once the user has answered 10 then the quiz ends
   if (questionIndex === 10){setTimeout(function() {
     endQuiz()
   }, 1000);return;}
-
+  // nextQuestion() will select the question title and answers from the questions.js file and generate the html elements
   nextQuestion(questionIndex)
+  // Select the answer buttons and loop through them adding the event listeners
   ans = document.querySelectorAll(".answerButton");
   for (j = 0; j < ans.length; j++){
     ans[j].addEventListener("click",function(event){
     chosenAnswer = event.target.textContent
+    // If the answer is correct
       if (chosenAnswer ==  randomQuestions[questionIndex].correctAnswer)
       {
+        // Play winning audio
         winAudio.play();
+        // The score timer resets each question and ticks down. If the user answers quickly they get a higher score. If the score timer has gone past 1 then they will get 1 point.
         if (scoreTimer < 1){
           score++
         }
         else
         {score = score + scoreTimer}
-        
+        // Increment the question index and show the correct screen
         questionIndex++
         correctScreen.setAttribute("class","start");
         questionsScreen.setAttribute("class","hide");
         timeScreen.setAttribute("class","hide");
+        // Add a second to the timeLeft to compensate the user for the second used to show correctScreen
         timeLeft++
+        // After showing the correct screen for a second we hide it and show the question screen again. Unless we've reached the end of the quiz or out of time and then don't show and the end-screen will show after
         setTimeout(function() {
           correctScreen.setAttribute("class", "hide");
           if (questionIndex < 10 && timeLeft > 0){
@@ -73,11 +83,10 @@ function runQuiz(){
           questionsScreen.setAttribute("class","start");
           }
         }, 1000);
-        console.log(questionIndex)
-        console.log(score)
         runQuiz()
       }
       else
+      // If the user gets it wrong. Mostly the same as above except removing time left instead of adding to their score
       {
         loseAudio.play();
         timeLeft = timeLeft - 10
@@ -102,7 +111,7 @@ function runQuiz(){
 }
 
 
-
+// This function handles the clock and monitors to end the quiz if the user runs out of time
 function tickTock()
 {
   timeLeft --
@@ -157,7 +166,7 @@ function nextQuestion(i){
   });  
 
 }
-
+  // Hide the questions screen and show the end screen.
 function endQuiz(){
   questionsScreen.setAttribute("class","hide")
   endScreen.setAttribute("class","start")
@@ -167,9 +176,14 @@ function endQuiz(){
   timeScreen.setAttribute("class","hide")
 }
 
+ 
 function highscoreSubmit(){
+  // Show an error message and stop the function if the user hasn't entered anything or the entered something more than 3 initials
   if(initials.value === "" || initials.value.length > 3){errorEl.setAttribute("class","start");return;}
+  // Retrieve the high scores from local storage
   var highScores = JSON.parse(localStorage.getItem("highScores"));
+  // If there is nothing in storage then we create a new array. Else, push to the existing array
+  // Take the user's initials and score and save them to localStorage
   if (highScores === null){
     highScores = [{
       initials: initials.value,
@@ -183,6 +197,7 @@ function highscoreSubmit(){
       score: score
     })
   }
+  // Load the scores back up to local storage and take the user to the highscores.html page
   localStorage.setItem("highScores", JSON.stringify(highScores));
   window.location.replace("highscores.html");
 };
